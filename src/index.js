@@ -148,7 +148,7 @@ export default class extends Component {
 
     animated: PropTypes.bool,
     scrollEventThrottle: PropTypes.number,
-    onScroll: PropTypes.func
+    onScroll: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
   }
 
   /**

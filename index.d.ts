@@ -102,7 +102,7 @@ declare module 'react-native-swiper' {
 
         // Should Animated.ScrollView/Pager be used?
         animated?: boolean
-        onScroll?: () => void
+        onScroll?: any
         scrollEventThrottle?: number
     }
 
