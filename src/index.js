@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated
 } from 'react-native'
 
 /**
@@ -143,7 +144,10 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+
+    animated: PropTypes.bool,
+    scrollEventThrottle: PropTypes.number
   }
 
   /**
@@ -170,7 +174,9 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    animated: false,
+    scrollEventThrottle: 0
   }
 
   /**
@@ -618,7 +624,7 @@ export default class extends Component {
   }
 
   refScrollView = view => {
-    this.scrollView = view;
+    this.scrollView = this.props.animated ? view._component : view;
   }
 
   onPageScrollStateChanged = state => {
@@ -634,8 +640,9 @@ export default class extends Component {
 
   renderScrollView = pages => {
     if (Platform.OS === 'ios') {
+      const Component = this.props.animated ? Animated.ScrollView : ScrollView
       return (
-        <ScrollView ref={this.refScrollView}
+        <Component ref={this.refScrollView}
           {...this.props}
           {...this.scrollViewPropOverrides()}
           contentContainerStyle={[styles.wrapperIOS, this.props.style]}
@@ -643,11 +650,14 @@ export default class extends Component {
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}
-          style={this.props.scrollViewStyle}>
+          style={this.props.scrollViewStyle}
+          scrollEventThrottle={this.props.scrollEventThrottle}>
           {pages}
-        </ScrollView>
+        </Component>
        )
     }
+
+    const Component = this.props.animated ? Animated.ViewPagerAndroid : ViewPagerAndroid
     return (
       <ViewPagerAndroid ref={this.refScrollView}
         {...this.props}
