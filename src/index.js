@@ -147,7 +147,8 @@ export default class extends Component {
     onIndexChanged: PropTypes.func,
 
     animated: PropTypes.bool,
-    scrollEventThrottle: PropTypes.number
+    scrollEventThrottle: PropTypes.number,
+    onScroll: PropTypes.func
   }
 
   /**
@@ -659,7 +660,7 @@ export default class extends Component {
 
     const Component = this.props.animated ? Animated.ViewPagerAndroid : ViewPagerAndroid
     return (
-      <ViewPagerAndroid ref={this.refScrollView}
+      <Component ref={this.refScrollView}
         {...this.props}
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
         onPageScrollStateChanged={this.onPageScrollStateChanged}
@@ -667,7 +668,7 @@ export default class extends Component {
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
         {pages}
-      </ViewPagerAndroid>
+      </Component>
     )
   }
 
